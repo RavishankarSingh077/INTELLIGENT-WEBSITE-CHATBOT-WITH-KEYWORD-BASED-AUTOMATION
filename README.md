@@ -1,4 +1,4 @@
-# FASC.AI Professional Chatbot
+# website Professional Chatbot
 
 A professional AI-powered chatbot for FASC.AI website that provides intelligent responses about company services and products using OpenAI's GPT models.
 
