@@ -1,0 +1,293 @@
+/**
+ * Project Management Styles
+ * Zero-impact CSS for project management features
+ */
+
+/* Project Management Buttons */
+.project-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.project-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+    text-align: center;
+}
+
+.project-button:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.project-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+/* Different button styles for different actions */
+.project-button[data-action="new_project"] {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.project-button[data-action="new_project"]:hover {
+    background: linear-gradient(135deg, #0f8a7e 0%, #32d46a 100%);
+}
+
+.project-button[data-action="existing_project"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.project-button[data-action="existing_project"]:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.project-button[data-action="add_features"] {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.project-button[data-action="add_features"]:hover {
+    background: linear-gradient(135deg, #e882f1 0%, #f34a5e 100%);
+}
+
+.project-button[data-action="raise_ticket"] {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.project-button[data-action="raise_ticket"]:hover {
+    background: linear-gradient(135deg, #3d8bfe 0%, #00e6fe 100%);
+}
+
+.project-button[data-action="complaint"] {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.project-button[data-action="complaint"]:hover {
+    background: linear-gradient(135deg, #f95f8a 0%, #fedc30 100%);
+}
+
+/* Message button container */
+.message-buttons {
+    margin: 10px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .project-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .project-button {
+        width: 100%;
+        min-width: auto;
+        padding: 15px 20px;
+        font-size: 16px;
+    }
+}
+
+/* Loading state for buttons */
+.project-button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.project-button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Popup window styles */
+.form-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-popup-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    max-height: 90%;
+    overflow: hidden;
+}
+
+.form-popup-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-popup-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.form-popup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.form-popup-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-popup-content {
+    padding: 0;
+    height: 600px;
+}
+
+.form-popup-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Animation for button appearance */
+.project-buttons {
+    animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Success/Error states */
+.project-button.success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    animation: pulse 0.6s ease-in-out;
+}
+
+.project-button.error {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    animation: shake 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .project-buttons {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .message-buttons {
+        background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        border-left-color: #667eea;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .project-button {
+        border: 2px solid #000;
+        font-weight: 600;
+    }
+    
+    .project-button:hover {
+        border-color: #333;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .project-button {
+        transition: none;
+    }
+    
+    .project-button:hover {
+        transform: none;
+    }
+    
+    .project-buttons {
+        animation: none;
+    }
+    
+    .project-button.success,
+    .project-button.error {
+        animation: none;
+    }
+}
+
+

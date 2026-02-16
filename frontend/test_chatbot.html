@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot with Project Management</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .test-content {
+            padding: 20px;
+        }
+        
+        .test-instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .test-instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .test-instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .test-instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧪 Chatbot Test with Project Management</h1>
+            <p>Test the new AI Agent project management features</p>
+        </div>
+        
+        <div class="test-content">
+            <div class="test-instructions">
+                <h3>📋 Test Instructions:</h3>
+                <ol>
+                    <li><strong>Name Test:</strong> Say "I am [Your Name]" then ask "what is my name"</li>
+                    <li><strong>Project Intent Test:</strong> Say "I want to start a project with you" - should show buttons</li>
+                    <li><strong>Button Test:</strong> Click "New Project" button - should open form popup</li>
+                    <li><strong>Existing Project Test:</strong> Click "Existing Project" - should ask for details</li>
+                    <li><strong>Form Integration:</strong> Fill and submit form - chatbot should acknowledge</li>
+                </ol>
+            </div>
+            
+            <!-- Include the chatbot widget -->
+            <div id="fascai-chatbot">
+                <!-- Chatbot widget will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the chatbot script -->
+    <script>
+        // FASC.AI Configuration
+        const FASC_AI_CONFIG = {
+            apiUrl: 'http://127.0.0.1:8000/chat',
+            websiteUrl: 'https://fascai.com',
+            companyName: 'Fasc AI'
+        };
+    </script>
+    
+    <!-- Include the chatbot HTML content -->
+    <script>
+        // Load chatbot HTML content
+        fetch('chatbot.html')
+            .then(response => response.text())
+            .then(html => {
+                // Extract the chatbot widget HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const chatbotWidget = doc.getElementById('fascai-chatbot');
+                
+                if (chatbotWidget) {
+                    document.getElementById('fascai-chatbot').innerHTML = chatbotWidget.innerHTML;
+                    
+                    // Execute the chatbot script
+                    const scripts = doc.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        if (script.textContent) {
+                            eval(script.textContent);
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading chatbot:', error);
+                document.getElementById('fascai-chatbot').innerHTML = 
+                    '<p style="color: red; text-align: center; padding: 20px;">Error loading chatbot. Please check if chatbot.html exists.</p>';
+            });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

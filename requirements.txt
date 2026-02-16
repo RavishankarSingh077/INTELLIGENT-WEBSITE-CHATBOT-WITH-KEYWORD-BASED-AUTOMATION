@@ -1,0 +1,29 @@
+# FASC.AI Chatbot - Core Dependencies
+# Web Framework
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+
+# HTTP and Web Scraping
+requests==2.31.0
+httpx==0.25.2
+beautifulsoup4==4.12.2
+
+# Vector Database and Embeddings
+chromadb==0.4.24
+sentence-transformers==2.3.1
+
+# Machine Learning
+torch>=2.0.0
+transformers>=4.35.0
+
+# Utilities
+python-dotenv==1.0.0
+
+# Rate Limiting and Security
+slowapi==0.1.9
+redis==5.0.1
+
+# Task Scheduling
+apscheduler==3.10.4
+

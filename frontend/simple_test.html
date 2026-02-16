@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .chat-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .bot-message {
+            background-color: #e9ecef;
+            color: #333;
+        }
+        
+        .button-container {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .chat-button {
+            background: linear-gradient(135deg, #8ec5fc, #6fb1fc);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(111, 177, 252, 0.3);
+        }
+        
+        .chat-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(111, 177, 252, 0.4);
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+        
+        .test-instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .test-instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .test-instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .test-instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧪 Chatbot Test with Project Management</h1>
+            <p>Test the new AI Agent project management features</p>
+        </div>
+        
+        <div class="test-instructions">
+            <h3>📋 Test Instructions:</h3>
+            <ol>
+                <li><strong>Name Test:</strong> Say "I am [Your Name]" then ask "what is my name"</li>
+                <li><strong>Project Intent Test:</strong> Say "I want to start a project with you" - should show buttons</li>
+                <li><strong>Button Test:</strong> Click "New Project" button - should open form popup</li>
+                <li><strong>Existing Project Test:</strong> Click "Existing Project" - should ask for details</li>
+                <li><strong>Form Integration:</strong> Fill and submit form - chatbot should acknowledge</li>
+            </ol>
+        </div>
+        
+        <div class="chat-container" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    Hello! I'm friendly AI assistant. I can help you learn about our IT & AI services. How can I assist you today?
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Type your message..." maxlength="500">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_URL = 'http://127.0.0.1:8000/chat';
+        const PROJECT_ACTION_URL = 'http://127.0.0.1:8000/project-action';
+        const FORM_SUBMISSION_URL = 'http://127.0.0.1:8000/form-submission';
+        
+        // Generate session ID
+        const sessionId = 'test_' + Math.random().toString(36).substr(2, 9);
+        
+        // DOM Elements
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        
+        // State
+        let isTyping = false;
+        
+        // Event Listeners
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Functions
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message || isTyping) return;
+            
+            // Add user message
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            // Disable input
+            sendBtn.disabled = true;
+            messageInput.disabled = true;
+            
+            // Show typing
+            showTyping();
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Hide typing and show response
+                hideTyping();
+                addMessage(data.reply || 'Sorry, I couldn\'t process your request.');
+                
+                // Handle buttons if present
+                if (data.buttons && data.buttons.length > 0) {
+                    addButtonsToLastMessage(data.buttons);
+                }
+                
+            } catch (error) {
+                console.error('Error sending message:', error);
+                hideTyping();
+                addMessage('Sorry, I\'m having trouble connecting. Please try again later.');
+            } finally {
+                // Re-enable input
+                sendBtn.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            }
+        }
+        
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = content;
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addButtonsToLastMessage(buttons) {
+            const messages = document.querySelectorAll('.message.bot-message');
+            if (messages.length === 0) return;
+            
+            const lastMessage = messages[messages.length - 1];
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+            
+            buttons.forEach(button => {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = button.text;
+                buttonElement.className = 'chat-button';
+                
+                buttonElement.addEventListener('click', () => {
+                    handleButtonClick(button.action, button.text);
+                });
+                
+                buttonContainer.appendChild(buttonElement);
+            });
+            
+            lastMessage.appendChild(buttonContainer);
+        }
+        
+        async function handleButtonClick(action, buttonText) {
+            try {
+                // Show typing
+                showTyping();
+                
+                // Send button action to backend
+                const response = await fetch(PROJECT_ACTION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        additional_data: '',
+                        session_id: sessionId
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Hide typing and show response
+                hideTyping();
+                addMessage(data.reply || 'Action processed.');
+                
+                // Handle form URL if present
+                if (data.form_url) {
+                    openFormPopup(data.form_url, data.form_type);
+                }
+                
+            } catch (error) {
+                console.error('Error handling button click:', error);
+                hideTyping();
+                addMessage('Sorry, there was an error processing your request.');
+            }
+        }
+        
+        function openFormPopup(url, formType) {
+            // Create popup window
+            const popup = window.open(
+                url,
+                'formPopup',
+                'width=800,height=600,resizable=yes,scrollbars=yes'
+            );
+            
+            if (popup) {
+                // Listen for form submission
+                const checkClosed = setInterval(() => {
+                    if (popup.closed) {
+                        clearInterval(checkClosed);
+                        // Notify backend about form submission
+                        notifyFormSubmission(formType);
+                    }
+                }, 1000);
+            }
+        }
+        
+        async function notifyFormSubmission(formType) {
+            try {
+                await fetch(FORM_SUBMISSION_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        form_type: formType,
+                        session_id: sessionId
+                    })
+                });
+                
+                // Show acknowledgment message
+                addMessage('Thank you for your submission. We will get back to you soon!');
+                
+            } catch (error) {
+                console.error('Error notifying form submission:', error);
+            }
+        }
+        
+        function showTyping() {
+            if (isTyping) return;
+            
+            isTyping = true;
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.id = 'typing-indicator';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = 'Typing...';
+            
+            typingDiv.appendChild(contentDiv);
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function hideTyping() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            isTyping = false;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
