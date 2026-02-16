@@ -237,5 +237,5 @@ For issues or questions:
 
 ---
 
-**Ready to deploy?** Follow the setup instructions above and your professional FASC.AI chatbot will be live! 🚀
+**Ready to deploy?** Follow the setup instructions above and your professional chatbot will be live! 🚀
 
